@@ -78,7 +78,7 @@ public class CategorywisePlaceActivity extends AppCompatActivity {
                     }
                 }
 
-                    adapterCategorywisePlace = new AdapterCategorywisePlace(templist,this);
+                    adapterCategorywisePlace = new AdapterCategorywisePlace(templist,CategorywisePlaceActivity.this);
                     lvCategorywisePlace.setAdapter(adapterCategorywisePlace);
 
             }
