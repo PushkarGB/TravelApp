@@ -34,6 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="#66A9A9A9"
                 android:queryHint="Search for recipes..." />
 
             <!-- Two rows of 3 square boxes for categories -->
