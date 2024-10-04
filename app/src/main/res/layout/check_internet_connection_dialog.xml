@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/Light_grey"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/icon_wifi_off"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Opps!"
+        android:textColor="@color/red"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/adamina"
+        android:layout_marginTop="8dp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Internet connection"
+        android:textColor="@color/red"
+        android:textSize="18sp"
+        android:fontFamily="@font/adamina"
+        android:layout_marginTop="8dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please Check Your Connection"
+        android:textColor="@color/red"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/adamina"
+        android:layout_marginTop="8dp"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/acbtnCheckInternetConnectionRetry"
+        android:text="RETRY"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_bg_shape"
+        android:layout_margin="40sp"
+        android:fontFamily="@font/aclonica"
+        android:textSize="16sp"/>
+
+
+
+
+</LinearLayout>

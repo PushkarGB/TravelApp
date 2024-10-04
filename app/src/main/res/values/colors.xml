@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="purple">#6FACDC</color>
+    <color name="blue">#9479C5</color>
+    <color name="darkblue">#34CFE1</color>
+    <color name="pink">#D68FA7</color>
+    <color name="background">#f2f5f8</color>
+    <color name="banner_background">#f1E9CE</color>
+    <color name="background_light">#56f1E9CA</color>
+    <color name="red">#7E0D0D</color>
+    <color name="redLight">#D65B5B</color>
+    <color name="Light_grey">#DFDBDB</color>
+    <color name="green">#1CA122</color>
+
+
+
+
+
+
+
+
+
+</resources>

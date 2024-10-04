@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <item
+            android:id="@+id/menuHomeMyLocation"
+            android:title="My Location"
+            app:showAsAction="always"
+            android:icon="@drawable/mylocation"/>
+
+
+    <item
+            app:showAsAction="always"
+            android:id="@+id/a"
+            android:icon="@drawable/icon_menu"
+            android:title="">
+
+            <menu>
+
+                <item
+                    android:id="@+id/menuHomeMyProfile"
+                    android:title="MyProfile"
+                    app:showAsAction="never"
+                    android:icon="@drawable/baseline_person_outline_24"/>
+
+                <item
+                    android:id="@+id/menuHomeSettings"
+                    android:title="Settings"
+                    app:showAsAction="never"
+                    android:icon="@drawable/baseline_settings_24"/>
+                <item
+                    android:id="@+id/menuHomeContactUs"
+                    android:title="Contact Us"
+                    app:showAsAction="never"
+                    android:icon="@drawable/baseline_contacts_24"/>
+                <item
+                    android:id="@+id/menuHomeAboutUs"
+                    android:title="About Us"
+                    app:showAsAction="never"
+                    android:icon="@drawable/baseline_people_24"/>
+                <item
+                    android:id="@+id/menuHomeLogout"
+                    android:title="Logout"
+                    app:showAsAction="never"
+                    android:icon="@drawable/baseline_logout_24" />
+
+            </menu>
+        </item>
+    </menu>
+

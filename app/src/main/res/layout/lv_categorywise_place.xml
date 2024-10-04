@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cvcategorywiseplace"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16sp"
+        app:cardMaxElevation="16sp"
+        android:layout_margin="12sp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/icCategorywiseplaceimage"
+                android:src="@drawable/categorywiseplacesample"
+                android:scaleType="fitXY"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvCategorywisePlacePlaceName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:text="Indian Most Popular Historical Places"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/alegreya"
+                    android:textSize="24sp"
+                    android:layout_margin="6sp"/>
+                <TextView
+                    android:id="@+id/tvCategorywisePlacePlacerating"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:text="4.4"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/alegreya"
+                    android:textSize="24sp"
+                    android:layout_margin="6sp"
+                    android:gravity="center"
+                    android:background="@color/green"/>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Light_grey"
+                android:layout_marginTop="4sp"/>
+            <TextView
+                android:id="@+id/tvCategorywisePlacePlacediscription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Place Description"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:fontFamily="@font/adamina"
+                android:textSize="14sp"
+                android:layout_margin="6sp"
+                android:maxLength="25"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Light_grey"
+                android:layout_marginTop="4sp"/>
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
