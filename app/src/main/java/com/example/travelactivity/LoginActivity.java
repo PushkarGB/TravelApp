@@ -6,15 +6,14 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.example.travelactivity.comman.NetworkChangeListener;
-import com.example.travelactivity.comman.Urls;
+import com.example.travelactivity.BroadCastReceivers.NetworkChangeListener;
+import com.example.travelactivity.Common.Urls;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -35,7 +34,6 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,10 +61,9 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        // Initialize preferences and editor only once
-        preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-        editor = preferences.edit();
 
+        preferences = getSharedPreferences("SharedData",MODE_PRIVATE);
+        editor = preferences.edit();
 
         // Initialize UI elements
         etUsername = findViewById(R.id.username);
@@ -108,18 +105,11 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.setMessage("Logging in...");
                     progressDialog.setCanceledOnTouchOutside(true);
                     progressDialog.show();
-                    userlogin();
+                    userLogin();
                 }
             }
         });
 
-        tvForgetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ConfirmRegisterMobilenoActivity.class);
-                startActivity(intent);
-            }
-        });
 
         tvloginNewuser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
         unregisterReceiver(networkChangeListener);
     }
 
-    private void userlogin() {
+    private void userLogin() {
         AsyncHttpClient client = new AsyncHttpClient(); //client-server communication
         RequestParams params = new RequestParams(); //data put
 
@@ -191,8 +181,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 try {
                     String status = response.getString("success");
+                    String username = response.getString("username");
+                    String role = response.getString("userrole");
+                    String profilePic = response.getString("profilePic");
                     if (status.equals("1")) {
-                        editor.putString("username", etUsername.getText().toString());
+                        editor.putString("username", username);
                         editor.putBoolean("isLogin", true); // Set isLogin to true
                         editor.apply();
 
@@ -212,6 +205,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 progressDialog.dismiss();
+                Log.d("LoginError"," " + throwable + " " + errorResponse);
                 Toast.makeText(LoginActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
             }
         });

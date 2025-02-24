@@ -1,4 +1,4 @@
-package com.example.travelactivity.comman;
+package com.example.travelactivity.BroadCastReceivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,7 +11,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.travelactivity.R;
-import com.example.travelactivity.comman.NetworkDetails;
 
 public class NetworkChangeListener  extends BroadcastReceiver {
     @Override

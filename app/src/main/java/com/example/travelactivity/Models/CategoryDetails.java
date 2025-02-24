@@ -1,12 +1,12 @@
-package com.example.travelactivity;
+package com.example.travelactivity.Models;
 
-public class POJOGetAllCategoryDetails {
+public class CategoryDetails {
     //pojo = plain old java object
     //pojo multiple data get and set
     //reusability
     String id,categoryImage,categoryName;
 
-    public POJOGetAllCategoryDetails(String sid, String scategoryImage, String scategoryName) {
+    public CategoryDetails(String sid, String scategoryImage, String scategoryName) {
         this.id = sid;
         this.categoryImage = scategoryImage;
         this.categoryName = scategoryName;

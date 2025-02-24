@@ -1,4 +1,4 @@
-package com.example.travelactivity.comman;
+package com.example.travelactivity.BroadCastReceivers;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

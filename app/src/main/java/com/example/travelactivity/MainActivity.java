@@ -1,8 +1,10 @@
 package com.example.travelactivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -16,11 +18,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-   ImageView ivLogo;
-   TextView tvTitle;
+    ImageView ivLogo;
+    TextView tvTitle;
 
-   Handler handler;
-   Animation animtraslate;
+    Handler handler;
+    Animation animtraslate;
 
 
     @Override
@@ -29,21 +31,29 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences preferences = getSharedPreferences("SharedData",MODE_PRIVATE);
+        Boolean isLogin = preferences.getBoolean("isLogin", false);
+
 
         ivLogo = findViewById(R.id.ivSplashLogo);
         tvTitle = findViewById(R.id.tvsplashTitle);
 
-        animtraslate = AnimationUtils.loadAnimation(MainActivity.this,R.anim.toptobottomtranslate);
+        animtraslate = AnimationUtils.loadAnimation(MainActivity.this, R.anim.toptobottomtranslate);
         ivLogo.startAnimation(animtraslate);
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        handler.postDelayed( new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                Intent i;
+                if (isLogin) {
+                    i = new Intent(MainActivity.this, HomeActivity.class);
+                } else {
+                    i = new Intent(MainActivity.this, LoginActivity.class);
+                }
                 startActivity(i);
                 finish();
             }
-        },4000);
+        }, 4000);
     }
 }

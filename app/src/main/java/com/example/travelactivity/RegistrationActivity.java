@@ -3,7 +3,10 @@ package com.example.travelactivity;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,11 +15,13 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.travelactivity.Common.Urls;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -30,12 +35,16 @@ import org.json.JSONObject;
 import java.util.concurrent.TimeUnit;
 
 import cz.msebera.android.httpclient.Header;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    EditText etName, etMobileNo, etEmailId,  etUsername, etPassword;
+    EditText etName, etMobileNo, etEmailId, etUsername, etPassword;
     Button btnRegister;
+    CircleImageView profileImage;
 
+    //Image Uri and string
+    Uri imageURI;
 
     ProgressDialog progressDialog;
 
@@ -51,9 +60,18 @@ public class RegistrationActivity extends AppCompatActivity {
         etEmailId = findViewById(R.id.etRegistrationEmailId);
         etUsername = findViewById(R.id.etRegistrationUsername);
         etPassword = findViewById(R.id.etRegistrationPassword);
-
-
         btnRegister = findViewById(R.id.btnRegisterRegister);
+        profileImage = findViewById(R.id.civRegistrationImage);
+
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 101);
+            }
+        });
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,45 +103,14 @@ public class RegistrationActivity extends AppCompatActivity {
                 } else if (!etPassword.getText().toString().matches(".*[@,#,$,&,%].*")) {
                     etPassword.setError("Password Must Contain at Least 1 Special Symbol");
                 } else {
-
                     progressDialog = new ProgressDialog(RegistrationActivity.this);
                     progressDialog.setTitle("Please Wait...");
                     progressDialog.setMessage("Registration is in process");
                     progressDialog.setCanceledOnTouchOutside(true);
                     progressDialog.show();
 
-                    PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                            "+91" + etMobileNo.getText().toString(),
-                            60,
-                            TimeUnit.SECONDS,
-                            RegistrationActivity.this,
-                            new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                                @Override
-                                public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(RegistrationActivity.this, "Verification Completed", Toast.LENGTH_SHORT).show();
-                                }
+                    userRegistertbl();
 
-                                @Override
-                                public void onVerificationFailed(@NonNull FirebaseException e) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(RegistrationActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
-                                }
-                                //123456
-                                @Override
-                                public void onCodeSent(@NonNull String verificationCode, @NonNull
-                                PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                                    Intent intent = new Intent(RegistrationActivity.this, VerifyOTPActivity.class);
-                                    intent.putExtra("verificationcode", verificationCode); //key => string,value
-                                    intent.putExtra("name",etName.getText().toString());
-                                    intent.putExtra("mobileno",etMobileNo.getText().toString());
-                                    intent.putExtra("email",etEmailId.getText().toString());
-                                    intent.putExtra("username",etUsername.getText().toString());
-                                    intent.putExtra("password",etPassword.getText().toString());
-                                    startActivity(intent);
-                                }
-                            }
-                    );
                 }
             }
         });
@@ -137,25 +124,30 @@ public class RegistrationActivity extends AppCompatActivity {
         params.put("email_id", etEmailId.getText().toString());
         params.put("username", etUsername.getText().toString());
         params.put("password", etPassword.getText().toString());
+        if (imageURI != null) {
+            params.put("profilePic", imageURI.toString());
+        } else {
+            params.put("profilePic", "profile.jpg");
+        }
+        params.put("latitude", 23);
+        params.put("longitude", 23);
+        params.put("address", "demo address");
 
-        client.post("http://192.168.81.203:80/TravelAPI/userregistertbl.php", params, new JsonHttpResponseHandler() {
+        client.post(Urls.registerUserWebService, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
 
                 try {
                     String status = response.getString("success");
-                    if (status.equals("1"))
-                    {
+                    if (status.equals("1")) {
                         progressDialog.dismiss();
-                        Toast.makeText(RegistrationActivity.this,"Registration Success" , Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(RegistrationActivity.this,LoginActivity.class);
+                        Toast.makeText(RegistrationActivity.this, "Registration Success", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
                         startActivity(intent);
-                    }
-                    else
-                    {
+                    } else {
                         progressDialog.dismiss();
-                        Toast.makeText(RegistrationActivity.this,"Already Data Present",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegistrationActivity.this, "Already Data Present", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -167,11 +159,22 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 progressDialog.dismiss();
-
+                Log.d("RegisterError"," "+throwable + " " +  errorResponse);
                 Toast.makeText(RegistrationActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 101) {
+            if (data != null) {
+                imageURI = data.getData();
+                profileImage.setImageURI(imageURI);
+            }
+        }
     }
 }
 

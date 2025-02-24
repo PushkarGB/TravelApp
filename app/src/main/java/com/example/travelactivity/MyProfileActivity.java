@@ -10,22 +10,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.travelactivity.comman.Urls;
+import com.example.travelactivity.Common.TableHeaders;
+import com.example.travelactivity.Common.Urls;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.loopj.android.http.AsyncHttpClient;
@@ -44,10 +39,8 @@ public class MyProfileActivity extends AppCompatActivity {
     ImageView ivProfilePhoto;
     TextView tvName, tvMobile, tvEmailId, tvUsername;
     AppCompatButton btnEditProfile, btnUpdateProfile, btnSignOut;
-    GoogleSignInOptions googleSignInOptions;
-
-    GoogleSignInClient googleSignInClient;
     SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     String strUsername;
     ProgressDialog progressDialog;
 
@@ -57,7 +50,7 @@ public class MyProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_profile);
 
         // Initialize your variables
-        preferences = PreferenceManager.getDefaultSharedPreferences(MyProfileActivity.this);
+        preferences = getSharedPreferences("SharedData", MODE_PRIVATE);
         strUsername = preferences.getString("username", "");
         ivProfilePhoto = findViewById(R.id.ivMyProfileProfilePhoto);
         btnEditProfile = findViewById(R.id.acbtnMyProfileEditProfile);
@@ -65,39 +58,37 @@ public class MyProfileActivity extends AppCompatActivity {
         tvName = findViewById(R.id.tvMyProfileName);
         tvEmailId = findViewById(R.id.tvMyProfileEmailID);
         tvUsername = findViewById(R.id.tvMyProfileUsername);
-        btnUpdateProfile =findViewById(R.id.btnupdate);
+        btnUpdateProfile = findViewById(R.id.btnupdate);
         btnSignOut = findViewById(R.id.btnSignOut);
 
+        // googleSignInOptions = new
+        // GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        // googleSignInClient = GoogleSignIn.getClient(MyProfileActivity.this,
+        // googleSignInOptions);
 
+        // GoogleSignInAccount googleSignInAccount =
+        // GoogleSignIn.getLastSignedInAccount(this);
+        // if (googleSignInAccount != null) {
+        // String name = googleSignInAccount.getDisplayName();
+        // String email = googleSignInAccount.getEmail();
 
+        // tvName.setText(name);
+        // tvEmailId.setText(email);
 
+        // }
 
-        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        googleSignInClient = GoogleSignIn.getClient(MyProfileActivity.this, googleSignInOptions);
+        btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if (googleSignInAccount != null) {
-            String name = googleSignInAccount.getDisplayName();
-            String email = googleSignInAccount.getEmail();
-
-            tvName.setText(name);
-            tvEmailId.setText(email);
-
-
-            btnSignOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Intent intent = new Intent(MyProfileActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-                }
-            });
-        }
+                editor = preferences.edit();
+                editor.putBoolean("isLogin", false);
+                editor.putString("username", "");
+                Intent intent = new Intent(MyProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -110,73 +101,68 @@ public class MyProfileActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(true);
         progressDialog.show();
 
-
         getMyDetails();
     }
 
     private void getMyDetails() {
-        AsyncHttpClient client = new AsyncHttpClient(); //client-server communication over network data pass
-        RequestParams params = new RequestParams(); //put the data in Asynchttpclient object
+        AsyncHttpClient client = new AsyncHttpClient(); // client-server communication over network data pass
+        RequestParams params = new RequestParams(); // parameters for php script
 
-        params.put("username",strUsername);
-        client.post(Urls.myDetailsWebService,params,new JsonHttpResponseHandler()
-                {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        progressDialog.dismiss();
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("getMyDetails");
+        params.put("username", strUsername);
+        client.post(Urls.myDetailsWebService, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                progressDialog.dismiss();
+                try {
+                    JSONArray jsonArray = response.getJSONArray("getMyDetails");
 
-                            for (int i=0; i<jsonArray.length();i++)
-                            {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                                String strid = jsonObject.getString("id");
-                                String strname = jsonObject.getString("name");
-                                String strimage = jsonObject.getString("image");
-                                String strmobileno = jsonObject.getString("mobile_no");
-                                String stremailId = jsonObject.getString("email_id");
-                                String strusername = jsonObject.getString("username");
+                        String strname = jsonObject.getString(TableHeaders.USER_DATA_name);
+                        String strimage = jsonObject.getString(TableHeaders.USER_DATA_image);
+                        String strmobileno = jsonObject.getString(TableHeaders.USER_DATA_phone);
+                        String stremailId = jsonObject.getString(TableHeaders.USER_DATA_email);
+                        String strusername = jsonObject.getString(TableHeaders.USER_DATA_username);
 
-                                tvName.setText(strname);
-                                tvMobile.setText(strmobileno);
-                                tvEmailId.setText(stremailId);
-                                tvUsername.setText(strUsername);
+                        tvName.setText(strname);
+                        tvMobile.setText(strmobileno);
+                        tvEmailId.setText(stremailId);
+                        tvUsername.setText(strusername);
 
-                                Glide.with(MyProfileActivity.this)
-                                        .load("http://192.168.48.203:80/TravelAPI/images/"+strimage)
-                                        .skipMemoryCache(true)
-                                       .error(R.drawable.image_not_found)
-                                        .into(ivProfilePhoto);
+                        Glide.with(MyProfileActivity.this)
+                                .load(Urls.imagesDirectory + strimage)
+                                .skipMemoryCache(true)
+                                .error(R.drawable.image_not_found)
+                                .into(ivProfilePhoto);
 
-                                btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent i = new Intent(MyProfileActivity.this,UpdateProfileActivity.class);
+                        btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(MyProfileActivity.this, UpdateProfileActivity.class);
 
-                                        i.putExtra("name",strname);
-                                        i.putExtra("mobileno",strmobileno);
-                                        i.putExtra("emailid",stremailId);
-                                        i.putExtra("username",strusername);
+                                i.putExtra("name", strname);
+                                i.putExtra("mobileno", strmobileno);
+                                i.putExtra("emailid", stremailId);
+                                i.putExtra("username", strusername);
 
-                                        startActivity(i);
-                                    }
-                                });
+                                startActivity(i);
                             }
-                        }
-                        catch (JSONException e)
-                        {
-                            throw new RuntimeException(e);
-                        }
+                        });
                     }
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        progressDialog.dismiss();;
-                        Toast.makeText(MyProfileActivity.this,"Server Error",Toast.LENGTH_SHORT).show();
-                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
-        );
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                progressDialog.dismiss();
+                ;
+                Toast.makeText(MyProfileActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

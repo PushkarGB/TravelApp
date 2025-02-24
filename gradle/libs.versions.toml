@@ -9,8 +9,10 @@ activity = "1.9.0"
 constraintlayout = "2.1.4"
 playServicesMaps = "19.0.0"
 firebaseAuth = "23.0.0"
+circleimageview = "3.1.0"
 
 [libraries]
+circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

@@ -9,16 +9,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.travelactivity.Common.Urls;
+import com.example.travelactivity.Models.CategoryWisePlaces;
 
 import java.util.List;
 
 public class AdapterCategorywisePlace extends BaseAdapter {
 
-    List<POJOCategorywisePlace> list;
+    List<CategoryWisePlaces> list;
     Activity activity;
 
-    public AdapterCategorywisePlace(List<POJOCategorywisePlace> pojoCategorywisePlaceList, Activity activity) {
-        this.list = pojoCategorywisePlaceList;
+    public AdapterCategorywisePlace(List<CategoryWisePlaces> categoryWisePlacesList, Activity activity) {
+        this.list = categoryWisePlacesList;
         this.activity = activity;
     }
 
@@ -59,14 +61,14 @@ public class AdapterCategorywisePlace extends BaseAdapter {
         {
             holder = (ViewHolder) view.getTag();
         }
-        final POJOCategorywisePlace obj = list.get(position);
+        final CategoryWisePlaces obj = list.get(position);
 
-        holder.tvCategorywisePlacename.setText(obj.getPlacename());
-        holder.tvCategorywisePlaceRating.setText(obj.getPlacerating());
-        holder.tvCategorywisePlaceDescription.setText(obj.getPlacediscription());
+        holder.tvCategorywisePlacename.setText(obj.getPlaceName());
+        holder.tvCategorywisePlaceRating.setText(obj.getPlaceRating());
+        holder.tvCategorywisePlaceDescription.setText(obj.getPlaceDescription());
 
         Glide.with(activity)
-                .load("http://192.168.0.107:80/TravelAPI/images/"+obj.getPlaceimage())
+                .load(Urls.imagesDirectory +obj.getPlaceImage())
                 .skipMemoryCache(true)
                 .error(R.drawable.image_not_found)
                 .into(holder.ivCategorywisePlaceImage);

@@ -12,28 +12,30 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
+import com.example.travelactivity.Common.Urls;
+import com.example.travelactivity.Models.CategoryDetails;
 
 import java.util.List;
 
 public class AadapterGetAllCategoryDetails extends BaseAdapter {
 
 
-    List<POJOGetAllCategoryDetails> pojoGetAllCategoryDetails;
+    List<CategoryDetails> CategoryDetails;
     Activity activity;
 
-    public AadapterGetAllCategoryDetails(List<POJOGetAllCategoryDetails> list, Activity activity) {
-        this.pojoGetAllCategoryDetails = list;
+    public AadapterGetAllCategoryDetails(List<CategoryDetails> list, Activity activity) {
+        this.CategoryDetails = list;
         this.activity = activity;
     }
 
     @Override
     public int getCount() {
-        return pojoGetAllCategoryDetails.size();
+        return CategoryDetails.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return pojoGetAllCategoryDetails.get(position);
+        return CategoryDetails.get(position);
     }
 
     @Override
@@ -58,11 +60,11 @@ public class AadapterGetAllCategoryDetails extends BaseAdapter {
 
         }
 
-        final POJOGetAllCategoryDetails obj = pojoGetAllCategoryDetails.get(position);
+        final CategoryDetails obj = CategoryDetails.get(position);
         holder.tvCategoryName.setText(obj.getCategoryName());
 
         Glide.with(activity)
-                .load("http://192.168.0.107:80/TravelAPI/images/" + obj.getCategoryImage())
+                .load(Urls.imagesDirectory  + obj.getCategoryImage())
                 .skipMemoryCache(true)
                 .error(R.drawable.image_not_found)
                 .into(holder.ivCategoryImage);

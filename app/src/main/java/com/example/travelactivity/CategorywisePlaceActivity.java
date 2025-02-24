@@ -6,14 +6,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.travelactivity.comman.Urls;
+import com.example.travelactivity.Common.TableHeaders;
+import com.example.travelactivity.Common.Urls;
+import com.example.travelactivity.Models.CategoryWisePlaces;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -34,7 +32,7 @@ public class CategorywisePlaceActivity extends AppCompatActivity {
     ListView lvCategorywisePlace;
     TextView tvNoPlaceFound;
     String strCategoryName;
-    List<POJOCategorywisePlace> pojoCategorywisePlaceList;
+    List<CategoryWisePlaces> categoryWisePlacesList;
     AdapterCategorywisePlace adapterCategorywisePlace;
 
 
@@ -46,9 +44,9 @@ public class CategorywisePlaceActivity extends AppCompatActivity {
         lvCategorywisePlace = findViewById(R.id.lvCategorywisePlacelistofplace);
         tvNoPlaceFound = findViewById(R.id.tvCategorywisePlaceNoPlaceisFound);
 
-        pojoCategorywisePlaceList = new ArrayList<>();
+        categoryWisePlacesList = new ArrayList<>();
 
-        strCategoryName =getIntent().getStringExtra("categoryname");
+        strCategoryName = getIntent().getStringExtra("categoryname");
 
         getCategorywisePlaceList();
 
@@ -66,20 +64,20 @@ public class CategorywisePlaceActivity extends AppCompatActivity {
             }
 
             private void searchPlacebyCategory(String query) {
-                List<POJOCategorywisePlace> templist = new ArrayList<>();
+                List<CategoryWisePlaces> templist = new ArrayList<>();
                 templist.clear();
 
-                for (POJOCategorywisePlace obj:pojoCategorywisePlaceList) {
-                    if (obj.getCategoryname().toUpperCase().contains(query.toUpperCase()) ||
-                            obj.getPlacename().toUpperCase().contains(query.toUpperCase()) ||
-                            obj.getPlacerating().toUpperCase().contains(query.toUpperCase()) ||
-                            obj.getPlacediscription().toUpperCase().contains(query.toUpperCase())) {
+                for (CategoryWisePlaces obj : categoryWisePlacesList) {
+                    if (obj.getCategoryName().toUpperCase().contains(query.toUpperCase()) ||
+                            obj.getPlaceName().toUpperCase().contains(query.toUpperCase()) ||
+                            obj.getPlaceRating().toUpperCase().contains(query.toUpperCase()) ||
+                            obj.getPlaceDescription().toUpperCase().contains(query.toUpperCase())) {
                         templist.add(obj);
                     }
                 }
 
-                    adapterCategorywisePlace = new AdapterCategorywisePlace(templist,CategorywisePlaceActivity.this);
-                    lvCategorywisePlace.setAdapter(adapterCategorywisePlace);
+                adapterCategorywisePlace = new AdapterCategorywisePlace(templist, CategorywisePlaceActivity.this);
+                lvCategorywisePlace.setAdapter(adapterCategorywisePlace);
 
             }
         });
@@ -90,38 +88,33 @@ public class CategorywisePlaceActivity extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();//client - server communication
         RequestParams params = new RequestParams();//put the data
 
-        params.put("categoryname",strCategoryName);
+        params.put("categoryname", strCategoryName);
 
         client.post(Urls.getCategorywisePlace,
-                params,new JsonHttpResponseHandler(){
+                params, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
                         try {
                             JSONArray jsonArray = response.getJSONArray("getCategorywisePlace");
-                            if (jsonArray.isNull(0))
-                            {
+                            if (jsonArray.isNull(0)) {
                                 lvCategorywisePlace.setVisibility(View.GONE);
                                 tvNoPlaceFound.setVisibility(View.VISIBLE);
                             }
-                            for (int i=0;i<jsonArray.length();i++)
-                            {
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String strid = jsonObject.getString("id");
-                                String strcategoryname = jsonObject.getString("categoryname");
-                                String strplacename = jsonObject.getString("placename");
-                                String strplaceimage = jsonObject.getString("placeimage");
-                                String strplacerating = jsonObject.getString("placerating");
-                                String strplaceoffer = jsonObject.getString("placeoffer");
-                                String strplacediscription = jsonObject.getString("placediscription");
+                                String strid = jsonObject.getString(TableHeaders.CATEGORY_WISE_PLACES_id);
+                                String strcategoryname = jsonObject.getString(TableHeaders.CATEGORY_WISE_PLACES_CategoryName);
+                                String strplacename = jsonObject.getString(TableHeaders.CATEGORY_WISE_PLACES_PlaceName);
+                                String strplaceimage = jsonObject.getString(TableHeaders.CATEGORY_WISE_PLACES_PlaceImage);
+                                String strplacerating = jsonObject.getString(TableHeaders.CATEGORY_WISE_PLACES_PlaceRating);
+                                String strplacediscription = jsonObject.getString(TableHeaders.CATEGORY_WISE_PLACES_PlaceDescription);
 
-                                pojoCategorywisePlaceList.add(new POJOCategorywisePlace(strid,strcategoryname,strplacename,
-                                        strplaceimage,strplacerating,strplaceoffer,strplacediscription));
-
-
+                                categoryWisePlacesList.add(new CategoryWisePlaces(strid, strcategoryname, strplacename,
+                                        strplaceimage, strplacerating, strplacediscription));
                             }
                             adapterCategorywisePlace = new
-                                    AdapterCategorywisePlace(pojoCategorywisePlaceList,
+                                    AdapterCategorywisePlace(categoryWisePlacesList,
                                     CategorywisePlaceActivity.this);
                             lvCategorywisePlace.setAdapter(adapterCategorywisePlace);
 
@@ -135,7 +128,7 @@ public class CategorywisePlaceActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
-                        Toast.makeText(CategorywisePlaceActivity.this,"Server Error",
+                        Toast.makeText(CategorywisePlaceActivity.this, "Server Error",
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
