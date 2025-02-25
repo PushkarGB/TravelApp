@@ -11,4 +11,7 @@ public class Urls {
     public static String updateProfileWebService = hostAddress + "/TravelAPI/updateProfile.php";
     public static String getAllCategoryDetailsWebService = hostAddress + "/TravelAPI/getAllCategoryDetails.php";
     public static String getCategorywisePlace = hostAddress + "/TravelAPI/categoryWisePlaces.php";
+    public static String getPopularPlaces = hostAddress + "/TravelAPI/popularPlaces.php";
+    public static String getLatestPlaces = hostAddress + "/TravelAPI/latestPlaces.php";
+    public static String updateProfilePic = hostAddress + "/TravelAPI/updateProfilePic.php";
 }

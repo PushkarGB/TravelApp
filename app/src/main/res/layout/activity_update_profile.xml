@@ -13,11 +13,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="match_parent"
             android:layout_height="190dp"
-            android:src="@drawable/logo"
-            android:layout_marginTop="60dp" />
+            android:layout_marginTop="60dp"
+            android:src="@drawable/logo" />
 
         <TextView
             android:layout_width="match_parent"
@@ -32,74 +32,69 @@
             android:layout_marginBottom="26dp"/>
 
         <EditText
+            android:id="@+id/etUpdateName"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:id="@+id/etUpdateName"
+            android:layout_marginBottom="19dp"
             android:background="@drawable/btgnshape"
             android:drawableLeft="@drawable/baseline_person_24"
-            android:hint="Name"
-            android:textColorHint="@color/black"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:drawablePadding="9dp"
             android:fontFamily="@font/adamina"
-            android:layout_marginBottom="19dp"
+            android:hint="Name"
             android:inputType="textPersonName"
             android:padding="15sp"
-            android:drawablePadding="9dp"
-            />
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/etUpdateMobileNo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:id="@+id/etUpdateMobileNo"
-            android:enabled="false"
+            android:layout_marginBottom="19dp"
             android:background="@drawable/btgnshape"
             android:drawableLeft="@drawable/baseline_contact_phone_24"
-            android:hint="Mobile No"
-            android:textColorHint="@color/black"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:drawablePadding="9dp"
+            android:enabled="false"
             android:fontFamily="@font/adamina"
-            android:layout_marginBottom="19dp"
+            android:hint="Mobile No"
             android:inputType="phone"
             android:padding="15sp"
-            android:drawablePadding="9dp" />
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/etUpdateEmailId"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:id="@+id/etUpdateEmailId"
+            android:layout_marginBottom="19dp"
             android:background="@drawable/btgnshape"
             android:drawableLeft="@drawable/baseline_email_24"
-            android:hint="Email ID"
-            android:textColorHint="@color/black"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:drawablePadding="9dp"
             android:fontFamily="@font/adamina"
-            android:layout_marginBottom="19dp"
+            android:hint="Email ID"
             android:inputType="textEmailAddress"
             android:padding="15sp"
-            android:drawablePadding="9dp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/etUpdateUsername"
-            android:background="@drawable/btgnshape"
-            android:drawableLeft="@drawable/baseline_person_24"
-            android:hint="Username"
-            android:textColorHint="@color/black"
             android:textColor="@color/black"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/adamina"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etUpdateUsername"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginBottom="19dp"
+            android:background="@drawable/btgnshape"
+            android:drawableLeft="@drawable/baseline_person_24"
+            android:drawablePadding="9dp"
+            android:fontFamily="@font/adamina"
+            android:hint="Username"
             android:inputType="text"
             android:padding="15sp"
-            android:drawablePadding="9dp" />
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
 
         <androidx.appcompat.widget.AppCompatButton

@@ -121,15 +121,6 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/acbtnLoginInWithGoogle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10sp"
-                android:text="Sign In With Google"
-                android:textColor="@color/black"
-                android:background="@drawable/common_google_signin_btn_text_dark_focused"/>
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

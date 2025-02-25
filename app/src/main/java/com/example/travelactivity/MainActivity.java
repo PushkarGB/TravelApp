@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 Intent i;
                 if (isLogin) {
-                    i = new Intent(MainActivity.this, HomeActivity.class);
+                    i = new Intent(MainActivity.this, MainHomeActivity.class);
                 } else {
                     i = new Intent(MainActivity.this, LoginActivity.class);
                 }

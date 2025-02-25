@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        preferences = getSharedPreferences("SharedData",MODE_PRIVATE);
+        preferences = getSharedPreferences("SharedData", MODE_PRIVATE);
         editor = preferences.edit();
 
         // Initialize UI elements
@@ -72,21 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.loginButton);
         tvForgetPassword = findViewById(R.id.tvLoginForgetPassword);
         tvloginNewuser = findViewById(R.id.tvloginNewuser);
-        btnSignInWithGoogle = findViewById(R.id.acbtnLoginInWithGoogle);
 
-        // Configure Google Sign-In options
-        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, googleSignInOptions);
-
-        // Set up click listeners
-        btnSignInWithGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SignIn();
-            }
-        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,27 +117,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void SignIn() {
-        Intent intent = googleSignInClient.getSignInIntent();
-        startActivityForResult(intent, 999);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 999) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                task.getResult(ApiException.class);
-                Intent intent = new Intent(LoginActivity.this, MyProfileActivity.class);
-                startActivity(intent);
-                finish();
-            } catch (ApiException e) {
-                Toast.makeText(this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     @Override
     protected void onStart() {
@@ -181,15 +146,18 @@ public class LoginActivity extends AppCompatActivity {
 
                 try {
                     String status = response.getString("success");
-                    String username = response.getString("username");
-                    String role = response.getString("userrole");
-                    String profilePic = response.getString("profilePic");
                     if (status.equals("1")) {
+                        String username = response.getString("username");
+                        String role = response.getString("userrole");
+                        String profilePic = response.getString("profilePic");
+
                         editor.putString("username", username);
-                        editor.putBoolean("isLogin", true); // Set isLogin to true
+                        editor.putBoolean("isLogin", true);// Set isLogin to true
+                        editor.putString("profilePic", profilePic);
+                        Log.d("profilePic", profilePic);
                         editor.apply();
 
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MainHomeActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
@@ -205,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 progressDialog.dismiss();
-                Log.d("LoginError"," " + throwable + " " + errorResponse);
+                Log.d("LoginError", " " + throwable + " " + errorResponse);
                 Toast.makeText(LoginActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
             }
         });

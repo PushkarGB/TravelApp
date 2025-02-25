@@ -102,7 +102,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 try {
                     String status = response.getString("success");
                     if (status.equals("1")) {
-
                         Toast.makeText(UpdateProfileActivity.this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(UpdateProfileActivity.this, MyProfileActivity.class);
                         editor.putString("username", etUsername.getText().toString());

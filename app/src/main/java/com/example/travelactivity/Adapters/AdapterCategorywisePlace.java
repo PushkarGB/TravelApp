@@ -1,6 +1,7 @@
-package com.example.travelactivity;
+package com.example.travelactivity.Adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.travelactivity.Common.Urls;
 import com.example.travelactivity.Models.CategoryWisePlaces;
+import com.example.travelactivity.PlaceDetails;
+import com.example.travelactivity.R;
 
 import java.util.List;
 
@@ -73,6 +76,16 @@ public class AdapterCategorywisePlace extends BaseAdapter {
                 .error(R.drawable.image_not_found)
                 .into(holder.ivCategorywisePlaceImage);
 
+        holder.ivCategorywisePlaceImage.setOnClickListener(
+                v -> {
+                    Intent intent = new Intent(activity, PlaceDetails.class);
+                    intent.putExtra("placeName",obj.getPlaceName());
+                    intent.putExtra("placeDescription",obj.getPlaceDescription());
+                    intent.putExtra("placeRating",obj.getPlaceRating());
+                    intent.putExtra("placeImage",obj.getPlaceImage());
+                    activity.startActivity(intent);
+                }
+        );
         return view;
 
     }

@@ -4,8 +4,10 @@ import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +34,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import cz.msebera.android.httpclient.Header;
@@ -120,18 +123,19 @@ public class RegistrationActivity extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("name", etName.getText().toString());
-        params.put("mobile_no", etMobileNo.getText().toString());
-        params.put("email_id", etEmailId.getText().toString());
+        params.put("mobileno", etMobileNo.getText().toString());
+        params.put("emailid", etEmailId.getText().toString());
         params.put("username", etUsername.getText().toString());
         params.put("password", etPassword.getText().toString());
-        if (imageURI != null) {
-            params.put("profilePic", imageURI.toString());
-        } else {
-            params.put("profilePic", "profile.jpg");
+        try {
+            if (imageURI != null) {
+                String imagePath = getRealPathFromURI(imageURI);
+                params.put("profilePic", new java.io.File(imagePath));  // Uploads the actual file
+            }
+        } catch (Exception e) {
+            params.put("profilePic","profile.jpg");
+            Log.e("UploadError", "Error uploading image: " + e.getMessage());
         }
-        params.put("latitude", 23);
-        params.put("longitude", 23);
-        params.put("address", "demo address");
 
         client.post(Urls.registerUserWebService, params, new JsonHttpResponseHandler() {
             @Override
@@ -164,6 +168,17 @@ public class RegistrationActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if (cursor == null) {
+            return uri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(index);
+        }
     }
 
     @Override
